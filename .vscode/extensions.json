@@ -6,6 +6,7 @@
         "dbaeumer.vscode-eslint",
         "oderwat.indent-rainbow",
         "hediet.vscode-drawio",
-        "davidanson.vscode-markdownlint"
+        "davidanson.vscode-markdownlint",
+        "hediet.vscode-drawio"
     ]
 }
