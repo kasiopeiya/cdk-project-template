@@ -10,7 +10,7 @@ runs:
       id: check_pr
       run: |
         echo ${{ env.TITLE }}
-        echo "PR_COUNT=$(gh pr list -S ${{ env.TITLE }} 'in:title' | wc -l)" >> "$GITHUB_ENV"
+        echo "PR_COUNT=$(gh pr list -S ${{ env.TITLE }}' in:title' | wc -l)" >> "$GITHUB_ENV"
       shell: bash
 
     - name: create a pull request
