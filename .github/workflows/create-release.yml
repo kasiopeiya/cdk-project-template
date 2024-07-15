@@ -1,50 +1,50 @@
-name: create-release
+name: create release action
 on:
-  workflow_dispatch:
-    inputs:
-      version:
-        description: The version to tag the release with, e.g., 1.2.0, 1.2.1-alpha.1
-        required: true
-
+  push:
+    tags:
+      - v*
 jobs:
   create-release:
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
+      - run: cat $GITHUB_EVENT_PATH
+      - run: lsb_release -d
+      - run: gh --version
+
       - uses: actions/checkout@v4
 
-      - name: Get latest tag
+      - name: get latest tag
         id: get-latest-tag
         run: |
           echo "LATEST_TAG=${GITHUB_REF##*/}" >> $GITHUB_ENV
 
-      - name: Create Release
+      - name: create release
         id: create-release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: '${{ github.event.inputs.version }}'
-          release_name: 'Release ${{ github.event.inputs.version }}'
-          body: 'Please see [CHANGELOG](https://github.com/kasiopeiya/cdk-project-template-github-actions/blob/main/CHANGELOG.md) for details.'
+          tag_name: '${{ env.LATEST_TAG }}'
+          release_name: 'Release ${{ env.LATEST_TAG }}'
+          body: 'Please see [CHANGELOG](https://github.com/kasiopeiya/cdk-project-template/blob/dev/CHANGELOG.md) for details.'
           draft: false
-          prerelease: false
+          prerelease: true
 
-      - name: Create Asset
+      - name: create template
         run: |
           rm -rf .git docs test/dev/__snapshots__ test/prod/__snapshots__
           echo "" > CHANGELOG.md
           echo "" > README.md
-          zip -r slim-template.zip ./
+          zip -r cdk-project-template.zip ./
 
-      - name: Upload Release Asset
-        id: upload-release-asset
+      - name: upload asset
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create-release.outputs.upload_url }}
-          asset_path: ./slim-template.zip
-          asset_name: slim-template.zip
+          asset_path: ./cdk-project-template.zip
+          asset_name: cdk-project-template.zip
           asset_content_type: application/zip
