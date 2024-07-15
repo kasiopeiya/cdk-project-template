@@ -12,7 +12,7 @@ export class ProdStage extends StageBase {
 
     // スタックの削除保護
     for (const stack of Object.values(this.stacks)) {
-      Aspects.of(stack).add(new AddTerminationProtection())
+      Aspects.of(stack).add(new AddTerminationProtection(false))
     }
   }
 
@@ -27,13 +27,18 @@ export class ProdStage extends StageBase {
 }
 
 /**
- * スタックの削除保護を有効化するアスペクト
+ * スタックの削除保護を設定するアスペクト
  */
 class AddTerminationProtection implements IAspect {
+  private readonly terminationProtection: boolean
+  constructor(terminationProtection: boolean) {
+    this.terminationProtection = terminationProtection
+  }
+
   public visit(node: IConstruct): void {
     // スタックの場合のみ termination protection を設定
     if (Stack.isStack(node)) {
-      node.terminationProtection = true
+      node.terminationProtection = this.terminationProtection
     }
   }
 }
