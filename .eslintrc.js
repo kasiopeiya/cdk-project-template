@@ -33,5 +33,6 @@ module.exports = {
     "**/cdk.out/**",
     "*.d.ts",
     "*.js"
-  ]
+  ],
+  root: true
 };
