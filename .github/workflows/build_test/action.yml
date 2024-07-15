@@ -56,7 +56,7 @@ runs:
       continue-on-error: true
 
     - name: create job summary
-      uses: actions/github-script@7
+      uses: actions/github-script@v7
       with:
         github-token: ${{ env.GITHUB_TOKEN }}
         script: |
