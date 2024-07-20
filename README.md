@@ -25,7 +25,7 @@
 
 ## 構成
 
-![img](./docs/img/architecture.png)
+![img](./docs/img/cicd_architecture.png)
 
 ## 開発環境構築
 
