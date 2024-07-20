@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.13](https://github.com/kasiopeiya/cdk-project-template/compare/v0.1.12...v0.1.13) (2024-07-20)
+
+
+### Features
+
+* スタック削除保護設定の有効化無効化できるように実装変更 ([ccb1325](https://github.com/kasiopeiya/cdk-project-template/commit/ccb132571c9c1524ac05392a9a8fe2d88275ff24))
+
+
+### CI
+
+* **prod-deploy.yml:** cdk destroyを追加 ([571e1a4](https://github.com/kasiopeiya/cdk-project-template/commit/571e1a4c12a7086abe1b3df4835012d63a24881f))
+
 ### [0.1.12](https://github.com/kasiopeiya/cdk-project-template/compare/v0.1.11...v0.1.12) (2024-07-15)
 
 ### [0.1.11](https://github.com/kasiopeiya/cdk-project-template/compare/v0.1.9...v0.1.11) (2024-07-15)
