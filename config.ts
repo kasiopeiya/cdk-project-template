@@ -13,7 +13,7 @@ export const devConfig: Config = {
         account: process.env.DEV_ACCOUNT_ID,
         region: 'ap-northeast-1'
     },
-    prefix: 'kasio-dev',
+    prefix: 'kasio',
     vpcId: 'bbbbbbbbbb',
     InstanceType: ec2.InstanceType.of(ec2.InstanceClass.T2, ec2.InstanceSize.MICRO)
 }
@@ -23,7 +23,7 @@ export const prodConfig: Config = {
         account: process.env.PROD_ACCOUNT_ID,
         region: 'ap-northeast-1'
     },
-    prefix: 'kasio-prod',
+    prefix: 'kasio',
     vpcId: 'bbbbbbbbbb',
     InstanceType: ec2.InstanceType.of(ec2.InstanceClass.T2, ec2.InstanceSize.SMALL)
 }
