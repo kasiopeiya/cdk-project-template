@@ -1,12 +1,5 @@
 {
     "recommendations": [
-        "esbenp.prettier-vscode",
-        "amazonwebservices.aws-toolkit-vscode",
-        "editorconfig.editorconfig",
-        "dbaeumer.vscode-eslint",
-        "oderwat.indent-rainbow",
-        "hediet.vscode-drawio",
-        "davidanson.vscode-markdownlint",
-        "hediet.vscode-drawio"
+        "ms-vscode-remote.remote-containers"
     ]
 }
