@@ -1,14 +1,16 @@
-import { Stack, type StageProps, type IAspect, Aspects } from 'aws-cdk-lib'
+import { Stack, type StageProps, type IAspect, Aspects, type Environment } from 'aws-cdk-lib'
 import { type IConstruct, type Construct } from 'constructs'
 
-import { prodConfig } from '../../config'
+import { prodConfig, type Config } from '../../config'
 import { StageBase } from './stageBase'
 
 export class ProdStage extends StageBase {
   public readonly stacks: Record<string, Stack>
   constructor(scope: Construct, id: string, props: StageProps) {
     super(scope, id, props)
-    this.stacks = this.createStacks()
+    const config: Config = prodConfig
+    const env: Environment = props.env ?? prodConfig.env
+    this.stacks = this.createStacks(config, env)
 
     // スタックの削除保護
     for (const stack of Object.values(this.stacks)) {
@@ -16,11 +18,11 @@ export class ProdStage extends StageBase {
     }
   }
 
-  createStacks(): Record<string, Stack> {
+  createStacks(config: Config, env: Environment): Record<string, Stack> {
     // 各環境にのみデプロイするスタックを生成
     // const hogeStack = new HogeStack(this, 'HogeStack')
     return {
-      ...super.createCommonStacks(this, prodConfig)
+      ...super.createCommonStacks(this, config, env)
       // hogeStack
     }
   }
