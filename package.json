@@ -29,7 +29,7 @@
     "@typescript-eslint/eslint-plugin": "^6.4.0",
     "@typescript-eslint/parser": "^6.4.0",
     "eslint": "^8.57.0",
-    "aws-cdk": "2.155.0",
+    "aws-cdk": "2.156.0",
     "depcheck": "^1.4.7",
     "esbuild": "^0.23.1",
     "eslint-config-standard-with-typescript": "^43.0.1",
