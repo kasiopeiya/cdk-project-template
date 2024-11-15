@@ -9,24 +9,24 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name:  depcheck
+    - name: depcheck
       run: npm run depcheck
       shell: bash
 
-    - name:  check format
+    - name: check format
       run: npm run format:ci
       shell: bash
 
-    - name:  lint
+    - name: lint
       run: npm run lint:ci
       shell: bash
 
-    - name:  cdk diff
+    - name: cdk diff
       id: diff
       run: npx cdk diff "${{ inputs.env_name }}/*" > diff_job_summary 2>&1
       shell: bash
 
-    - name:  snapshot tests
+    - name: snapshot tests
       id: snapshot
       run: npm run test:snap > snapshot_job_summary 2>&1
       shell: bash
@@ -38,6 +38,7 @@ runs:
       shell: bash
       continue-on-error: true
 
+    # Summaryでテスト結果とdiffを確認できるようにする
     - name: create job summary
       uses: actions/github-script@v7
       with:
