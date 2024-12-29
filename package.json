@@ -42,7 +42,7 @@
     "winston": "^3.15.0"
   },
   "dependencies": {
-    "aws-cdk-lib": "2.173.2",
+    "aws-cdk-lib": "2.173.4",
     "cdk-nag": "^2.29.1",
     "constructs": "^10.4.2",
     "husky": "^9.1.6",
