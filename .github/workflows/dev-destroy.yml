@@ -45,7 +45,7 @@ jobs:
       - run: gh --version
       - run: aws --version
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - uses: aws-actions/configure-aws-credentials@v4
         with:
