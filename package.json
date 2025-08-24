@@ -46,7 +46,7 @@
     "cdk-nag": "^2.29.1",
     "constructs": "^10.4.2",
     "husky": "^9.1.6",
-    "tsx": "^4.19.3"
+    "tsx": "^4.20.5"
   },
   "lint-staged": {
     "*.{ts,tsx}": [
