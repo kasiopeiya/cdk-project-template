@@ -40,7 +40,7 @@ jobs:
 
       - uses: actions/checkout@v4
 
-      - uses: aws-actions/configure-aws-credentials@v4
+      - uses: aws-actions/configure-aws-credentials@v5
         with:
           role-to-assume: ${{ secrets.ROLE_TO_ASSUME }}
           aws-region: ap-northeast-1
