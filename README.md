@@ -165,3 +165,86 @@ SecretsにOIDC RoleのArnを、Variablesに環境名を登録する
 
 - Mergify  
   https://github.com/marketplace/mergify
+
+## GitHub Actions設定
+
+### OIDCロール作成
+
+```bash
+roleName="cdk-deploy-role-ap-northeast-1"
+region="ap-northeast-1"
+accountId=""
+# ex. kasiopeiya/*:*
+repositoryPath=""
+
+aws iam create-role \
+    --role-name $roleName \
+    --assume-role-policy-document '{
+        "Version": "2012-10-17",
+        "Statement": [
+            {
+                "Effect": "Allow",
+                "Principal": {
+                    "Federated": "arn:aws:iam::${accountId}:oidc-provider/token.actions.githubusercontent.com"
+                },
+                "Action": "sts:AssumeRoleWithWebIdentity",
+                "Condition": {
+                    "StringEquals": {
+                        "token.actions.githubusercontent.com:aud": "sts.amazonaws.com"
+                    },
+                    "StringLike": {
+                        "token.actions.githubusercontent.com:sub": "repo:${repositoryPath}"
+                    }
+                }
+            }
+        ]
+    }'
+
+aws iam attach-role-policy \
+    --role-name $roleName \
+    --policy-arn "arn:aws:iam:aws:policy/ReadOnlyAccess"
+
+aws iam put-role-policy \
+    --role-name $roleName \
+    --policy-name cdk-deploy-policy \
+    --policy-document '{
+        "Version": "2012-10-17",
+        "Statement": [
+            {
+                "Sid": "AssumeCDKRoles",
+                "Effect": "Allow",
+                "Action": "sts:AssumeRole",
+                "Resource": "*",
+                "Condition": {
+                    "ForAnyValue:StringEquals": {
+                            "iam:ResourceTag/aws-cdk:bootstrap-role": [
+                            "image-publishing",
+                            "file-publishing",
+                            "deploy",
+                            "lookup"
+                        ]
+                    }
+                }
+            },
+            {
+                "Sid": "testApiGateways",
+                "Effect": "Allow",
+                "Action": [
+                    "apigateway:GET",
+                    "apigateway:POST"
+                ]
+                "Resource": "*"
+            },
+            {
+                "Sid": "sanityTest",
+                "Effect": "Allow",
+                "Action": [
+                    "codebuild:StartBuild",
+                    "codebuild:BatchGetBuilds",
+                    "codebuild:BatchGetProjects"
+                ]
+                "Resource": "arn:aws:codebuild:${region}:${accountId}:project/*"
+            }
+        ]
+    }'
+```
