@@ -1,7 +1,7 @@
 import { Stack, type StageProps, type IAspect, Aspects, type Environment } from 'aws-cdk-lib'
 import { type IConstruct, type Construct } from 'constructs'
 
-import { prodConfig, type Config } from '../../config'
+import { prodConfig, type Config } from '../../parameter'
 import { StageBase } from './stageBase'
 
 export class ProdStage extends StageBase {

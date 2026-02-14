@@ -5,7 +5,7 @@ import { AwsSolutionsChecks, NagSuppressions } from 'cdk-nag'
 
 import { DevStage } from '../lib/stage/devStage'
 import { ProdStage } from '../lib/stage/prodStage'
-import { devConfig, prodConfig } from '../config'
+import { devConfig, prodConfig } from '../parameter'
 import { nagSuppressions } from '../test/nagSuppressions'
 
 const app = new cdk.App()

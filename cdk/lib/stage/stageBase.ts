@@ -1,7 +1,7 @@
 import { type Stack, Stage, type Environment } from 'aws-cdk-lib'
 import { type Construct } from 'constructs'
 
-import { type Config } from '../../config'
+import { type Config } from '../../parameter'
 import { MainAppStack } from '../stack/mainAppStack'
 import { BaseStack } from '../stack/baseStack'
 
