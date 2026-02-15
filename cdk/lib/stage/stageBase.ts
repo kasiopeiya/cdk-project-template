@@ -2,7 +2,7 @@ import { type Stack, Stage, type Environment } from 'aws-cdk-lib'
 import { type Construct } from 'constructs'
 
 import { type Config } from '../../parameter'
-import { MainAppStack } from '../stack/mainAppStack'
+import { MainAppStack } from '../stack/appStack'
 import { BaseStack } from '../stack/baseStack'
 
 export abstract class StageBase extends Stage {

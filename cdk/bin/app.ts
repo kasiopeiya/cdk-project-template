@@ -3,21 +3,15 @@ import * as cdk from 'aws-cdk-lib'
 import { Aspects, Stack } from 'aws-cdk-lib'
 import { AwsSolutionsChecks, NagSuppressions } from 'cdk-nag'
 
-import { DevStage } from '../lib/stage/devStage'
-import { ProdStage } from '../lib/stage/prodStage'
-import { devConfig, prodConfig } from '../parameter'
+import { DevStackBuilder, PrdStackBuilder} from '../lib/stackBuilder'
 import { nagSuppressions } from '../test/nagSuppressions'
 
 const app = new cdk.App()
 
-new DevStage(app, 'dev', {
-  env: devConfig.env
-})
+new DevStackBuilder(app)
+new PrdStackBuilder(app)
 
-new ProdStage(app, 'prd', {
-  env: prodConfig.env
-})
-
+// CDK Nagのルールを適用
 Aspects.of(app).add(new AwsSolutionsChecks({ verbose: true }))
 for (const node of app.node.children) {
   if (Stack.isStack(node)) {
