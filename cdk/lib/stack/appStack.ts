@@ -32,7 +32,7 @@ export class AppStack extends Stack {
     new nodejs.NodejsFunction(this, 'Function', {
       ...lambdaCommonProps,
       entry: path.join(__dirname, '../../../backend/src/handlers/base.ts'),
-      handler: 'handler',
+      handler: 'handler'
     })
   }
 }

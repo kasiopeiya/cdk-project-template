@@ -3,11 +3,11 @@
  * 開発環境のみ使用するスタックなどがあることを考慮し、環境別にビルダークラスを分離
  */
 
-import { type App, type Stack } from "aws-cdk-lib"
+import { type App, type Stack } from 'aws-cdk-lib'
 
-import { devParameter, prdParameter, type Parameter } from "../parameter"
-import { BaseStack } from "./stack/baseStack"
-import { AppStack } from "./stack/appStack"
+import { devParameter, prdParameter, type Parameter } from '../parameter'
+import { BaseStack } from './stack/baseStack'
+import { AppStack } from './stack/appStack'
 
 /**
  * 開発環境のスタック構築
@@ -24,7 +24,6 @@ export class DevStackBuilder {
     const appStack = new AppStack(app, `${this.param.prefix}-app-stack`, { env: this.param.env })
     return [baseStack, appStack]
   }
-
 }
 
 /**
@@ -42,5 +41,4 @@ export class PrdStackBuilder {
     const appStack = new AppStack(app, `${this.param.prefix}-app-stack`, { env: this.param.env })
     return [baseStack, appStack]
   }
-
 }

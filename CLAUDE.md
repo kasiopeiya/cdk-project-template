@@ -13,6 +13,7 @@ AWS CDKを使ったモノレポ構成のプロジェクトテンプレートで�
 - 本プロジェクトは仕様駆動開発を採用します。そのため新規開発時は`docs/design` 配下の設計書と実装の整合性を確認する必要があります。
 - 仕様や設計の判断が難しい場合は積極的にユーザーに確認を求めてください。疑問がある場合は質問してください。
 - ユーザーとのやり取りを通じて、他の場面でも発生しうる問題が発生した場合や、効率化のノウハウを得た場合は、必ず解答の最後に知見をまとめ、ルール更新の提案をすること
+- ライブラリをインストールする際は最新の安定バージョンを必ず使用すること
 
 ## 開発フロー
 
@@ -55,14 +56,6 @@ AWS CDKを使ったモノレポ構成のプロジェクトテンプレートで�
 
 `type: description` 形式（feat/fix/docs/refactor/test/chore）
 
-### 主要コマンド
-
-（厳守！）CDKコマンド実行前にtscによるビルドは実行しないこと
-
-```bash
-cd cdk && source deploy.sh
-```
-
 ## 技術スタック
 
 - **言語:** TypeScript (Node.js)
@@ -77,35 +70,25 @@ cd cdk && source deploy.sh
 ├── cdk/                      # AWS CDK インフラ定義
 │   ├── bin/                  # CDKアプリケーションエントリーポイント
 │   ├── lib/                  # スタック・コンストラクト定義
-│   └── test/                 # インフラテストコード
+│   │   ├── construct/        # カスタムコンストラクト
+│   │   ├── stack/            # スタック定義
+│   ├── test/                 # インフラテストコード（snapshotテストなど）
+│   └── parameter.ts          # 環境パラメータ定義
 │
-├── backend/                  # Lambda 関数（OIDC RP ロジック）
+├── backend/                  # Lambda 関数
 │   └── src/
-│       ├── handlers/         # Lambda ハンドラー関数
-│       └── utils/            # 共通ユーティリティ（state管理など）
+│       └── handlers/         # Lambda ハンドラー関数
 │
-├── frontend/                 # 静的ファイル（TypeScript/HTML）
-│   ├── public/               # 静的アセット
-│   └── src/
-│       ├── pages/            # ページコンポーネント
-│       ├── contexts/         # React Context定義
-│       ├── utils/            # フロントエンド共通関数
-│       └── test/             # フロントエンドテストコード
+├── frontend/                 # フロントエンドコード
 │
-├── docs/                     # 各種設計書・シーケンス図など
-│   ├── ADR/                  # ADR、メンテ不要
-│   ├── design/               # 設計書（backend, frontend, infrastructureなど）要メンテ（最優先参照）
-│   ├── idea/                 # アイデアメモ、メンテ不要
-│   ├── plan/                 # プランファイルの一時保管場所、メンテ不要
-│   ├── init/                 # 初期構築時のドキュメント、メンテ不要
-│   └── img/                  # 画像ファイル（シーケンス図など）
-│
-├── integration-tests/        # Playwrightによる結合テストコード
-│   ├── tests/                # テストシナリオ
-│   ├── setup/                # テスト環境セットアップ
-│   └── scripts/              # テスト用環境変数設定など
+├── docs/                     # 各種設計書・ドキュメント
+│   ├── adr/                  # ADR（Architecture Decision Record）
+│   ├── design/               # 設計書（要メンテ・最優先参照）
+│   ├── plan/                 # プランファイルの一時保管場所
+│   └── img/                  # 画像ファイル（アーキテクチャ図など）
 │
 ├── .claude/                  # Claude Code設定（agents, rules, skillsなど）
+├── .github/                  # GitHub Actions・PR設定
 ├── .husky/                   # Git hooks設定
 ├── CLAUDE.md                 # 本ファイル（AIへの指示書）
 ├── README.md                 # プロジェクト説明
