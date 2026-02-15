@@ -2,9 +2,9 @@
 # pull requst作成
 ########################################################################
 
-name: "create pull request aciton"
+name: 'create pull request aciton'
 runs:
-  using: "composite"
+  using: 'composite'
   steps:
     - name: check if pull request exists
       id: check_pr

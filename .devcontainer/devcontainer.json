@@ -1,25 +1,25 @@
 {
-    "name": "cdk-dev",
-    "service": "cdk",
-    "workspaceFolder": "/workspace",
-    "dockerComposeFile": "../docker-compose.yml",
-    "customizations": {
-        "vscode": {
-            "extensions": [
-                "stevencl.adddoccomments",
-                "esbenp.prettier-vscode",
-                "editorconfig.editorconfig",
-                "dbaeumer.vscode-eslint",
-                "oderwat.indent-rainbow",
-                "hediet.vscode-drawio",
-                "davidanson.vscode-markdownlint",
-                "yzhang.markdown-all-in-one",
-                "csholmq.excel-to-markdown-table"
-            ]
-        }
-    },
-    "remoteEnv": {
-      "DEV_ACCOUNT_ID": "${localEnv:DEV_ACCOUNT_ID}",
-      "PROD_ACCOUNT_ID": "${localEnv:PROD_ACCOUNT_ID}"
+  "name": "cdk-dev",
+  "service": "cdk",
+  "workspaceFolder": "/workspace",
+  "dockerComposeFile": "../docker-compose.yml",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "stevencl.adddoccomments",
+        "esbenp.prettier-vscode",
+        "editorconfig.editorconfig",
+        "dbaeumer.vscode-eslint",
+        "oderwat.indent-rainbow",
+        "hediet.vscode-drawio",
+        "davidanson.vscode-markdownlint",
+        "yzhang.markdown-all-in-one",
+        "csholmq.excel-to-markdown-table"
+      ]
     }
+  },
+  "remoteEnv": {
+    "DEV_ACCOUNT_ID": "${localEnv:DEV_ACCOUNT_ID}",
+    "PROD_ACCOUNT_ID": "${localEnv:PROD_ACCOUNT_ID}"
+  }
 }

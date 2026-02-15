@@ -52,5 +52,5 @@ jobs:
         uses: ./.github/workflows/create-pull-request
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          BRANCH: "main"
-          TITLE: "pre-release_from_${{ github.ref_name }}"
+          BRANCH: 'main'
+          TITLE: 'pre-release_from_${{ github.ref_name }}'

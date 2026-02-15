@@ -2,9 +2,9 @@
 #  Node.jsのセットアップとパッケージインストール
 ########################################################################
 
-name: "setup node and insrtall packages"
+name: 'setup node and insrtall packages'
 runs:
-  using: "composite"
+  using: 'composite'
   steps:
     - name: Use Node.js 20.17.x
       uses: actions/setup-node@v4

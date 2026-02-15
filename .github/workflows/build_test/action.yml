@@ -2,12 +2,12 @@
 # 静的解析、パッケージの依存関係チェック、テスト、差分確認
 ########################################################################
 
-name: "built test action"
+name: 'built test action'
 inputs:
   env_name:
     required: true
 runs:
-  using: "composite"
+  using: 'composite'
   steps:
     - name: depcheck
       run: npm run depcheck
