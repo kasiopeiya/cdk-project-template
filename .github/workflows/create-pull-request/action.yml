@@ -3,6 +3,7 @@
 ########################################################################
 
 name: 'create pull request aciton'
+description: 'Creates a pull request with commit message as title'
 runs:
   using: 'composite'
   steps:
