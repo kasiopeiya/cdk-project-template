@@ -3,7 +3,6 @@ name: cdk-review
 description: AWS CDK インフラコードを詳細にレビュー。/cdk-review コマンドが呼ばれたとき、またはユーザーが CDK コードのレビューを依頼したときに使用する。cdk/ ディレクトリ内の TypeScript ファイルを対象に、型安全性・CDK ベストプラクティス・プロジェクトルール準拠を自動チェックする。
 context: fork
 agent: cdk-reviewer-agent
-disable-model-invocation: true
 ---
 
 AWS CDK インフラコードをレビューしてください。以下の手順に従って実行してください。
@@ -21,7 +20,7 @@ AWS CDK インフラコードをレビューしてください。以下の手順
 
 ## Phase 2: レビュー実行
 
-各ファイルに対して `references/review-criteria.md` の17項目でレビューを実施する。
+各ファイルに対してエージェント定義の24項目でレビューを実施する。
 
 - Read でファイル内容を取得
 - Bash で `git log` から変更履歴を確認
