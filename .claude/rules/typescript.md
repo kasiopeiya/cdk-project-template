@@ -61,3 +61,60 @@ const label = isAdmin ? 'Admin' : 'User'
 if (error) return { statusCode: 500, body: 'Internal Server Error' }
 
 **例外：** 引数や要素が多く1行が長くなりすぎる場合（目安：100文字超）は適切に改行する。
+
+## 命名規則
+
+適切な名前をつけることで、コメントがなくても意図が伝わるコードを目指す。
+
+- 変数名・関数名は「何をするか／何を表すか」が名前から読み取れるようにする
+- 略語は避け、意味が明確な名前を使う（`usr` → `user`、`btn` → `button`）
+- 真偽値は `is` / `has` / `should` / `can` などのプレフィックスで意図を明示する
+- 関数名は動詞で始める（`getUser`、`validateInput`、`createSession`）
+- 定数は目的が伝わる名前にする（`3000` → `REQUEST_TIMEOUT_MS`）
+
+```typescript
+// ✅ 良い例：名前だけで意図が伝わる
+const isSessionExpired = expiresAt < Date.now()
+const fetchActiveUsers = async () => { ... }
+
+// ❌ 避けるべき例：意図が不明
+const flag = expiresAt < Date.now()
+const getData = async () => { ... }
+```
+
+## コメント
+
+基本方針：**変数名・関数名・クラス名が適切であればコメントは不要**。コメントはコードだけでは伝わらない情報を補足するために書く。
+
+### WHY コメントを優先する
+
+- WHAT（何をしているか）はコードを読めばわかる。**WHY（なぜそうしているか）** を書く
+- ビジネスルール・制約・トレードオフなど、コードの背景にある判断理由を記載する
+
+```typescript
+// ✅ 良い例：WHY（理由・背景）を説明
+// Cognito の仕様上、トークン取り消し後もキャッシュにより最大1時間有効なため、
+// セッションストア側でも無効化を管理する
+await revokeToken(refreshToken)
+await invalidateSession(sessionId)
+
+// ❌ 避けるべき例：WHAT（コードの直訳）を書いている
+// トークンを取り消してセッションを無効化する
+await revokeToken(refreshToken)
+await invalidateSession(sessionId)
+```
+
+### コメントを書くべき場面
+
+- **設計判断の理由：** なぜこのアプローチを選んだか（代替案を却下した理由など）
+- **外部制約：** API仕様・ライブラリの制限・ブラウザ互換性など
+- **非自明なロジック：** 一見不自然に見えるが意図的な実装
+- **TODO / FIXME：** 既知の課題や将来の改善点（Issue番号を併記）
+
+```typescript
+// APIGateway の制約により、レスポンスヘッダーは小文字に正規化される
+const token = headers['x-custom-token']
+
+// TODO(#42): バッチサイズを設定可能にする
+const BATCH_SIZE = 100
+```
