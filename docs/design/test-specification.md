@@ -156,7 +156,7 @@ expect(stubRepository.findById).toHaveBeenCalledWith('user-123')
 
 ```typescript
 // ✅ 良い例：シンプルなテスト → 空白行のみでフェーズを区切る
-it('returns_user_when_valid_id_is_provided', async () => {
+it('有効なIDを指定した場合にユーザー情報を返す', async () => {
   const event = createApiGatewayEvent({ pathParameters: { id: 'user-123' } })
 
   const result = await handler(event, context)
@@ -166,7 +166,7 @@ it('returns_user_when_valid_id_is_provided', async () => {
 })
 
 // ✅ 良い例：準備が複数行 → フェーズコメントを入れる
-it('returns_order_summary_with_applied_discount', async () => {
+it('ゴールド会員の場合に割引が適用された注文サマリーを返す', async () => {
   // Arrange
   const user = createUser({ membershipLevel: 'gold' })
   const items = [createItem({ price: 1000 }), createItem({ price: 2000 })]
@@ -187,25 +187,22 @@ it('returns_order_summary_with_applied_discount', async () => {
 
 #### テストケースの命名規則
 
-- **非開発者にも検証内容が伝わる名前**にする
+- **日本語で記述する**（非開発者にも検証内容が伝わるようにする）
 - テスト対象の**メソッド名を含めない**（テストはコードではなく振る舞いを検証している）
-- `should be` ではなく事実を示す表現（`is`、`returns`、`throws`）を使う
-- アンダースコアで単語を区切る
+- 「〜する」「〜される」「〜を返す」のように**事実を示す表現**で書く
+- `describe` のグループ名も日本語で記述する
 
 ```typescript
-// ✅ 良い例：振る舞いが明確、メソッド名を含まない
-'returns_400_when_required_parameter_is_missing'
-'expired_session_is_rejected'
-'discount_is_applied_when_user_is_gold_member'
+// ✅ 良い例：日本語で振る舞いが明確、メソッド名を含まない
+'必須パラメータが欠落している場合に400を返す'
+'有効期限切れのセッションは拒否される'
+'ゴールド会員の場合に割引が適用される'
 
 // ❌ 悪い例：メソッド名を含む
-'handleRequest_returns_400_for_invalid_input'
-
-// ❌ 悪い例：should be を使用
-'should_be_rejected_when_session_is_expired'
+'handleRequestは不正な入力に対して400を返す'
 
 // ❌ 悪い例：検証内容が曖昧
-'returns_error_for_invalid_input'  // "invalid" が何を指すか不明確
+'不正な入力でエラーを返す'  // 「不正」が何を指すか不明確
 ```
 
 #### SUT（テスト対象）の明示
@@ -221,22 +218,80 @@ const result = await sut(event, context)
 
 テストケース内にif文がある場合、1つのテストケースで多くのことをしようとしている兆候である。テストケースを分割すること。
 
+#### テストケースの分離基準
+
+テストケースを分けるか1つにまとめるかは、**仕様上の条件が異なるかどうか**で判断する。前提条件（Arrange）の入力値が異なっていても、仕様上同じ条件のバリエーションであれば1つのテストケースにまとめてよい。
+
+**仕様上の条件とは：** テストケース名における条件部分（「〜の場合に」）を指す。この条件部分が同じ文言で自然に表現できるなら同じ条件であり、異なる文言でないと区別できないなら異なる条件と判断する。
+
+| 入力値 | テストケース名の条件部分 | 判断 |
+|--------|--------------------------|------|
+| `email = ''` | 「メールアドレスの形式が不正な場合に」 | 同じ → まとめる |
+| `email = '@foo'` | 「メールアドレスの形式が不正な場合に」 | 同じ → まとめる |
+| トークンなし | 「未認証の場合に」 | 異なる → 分ける |
+| 他ユーザーのリソース | 「他ユーザーのリソースにアクセスした場合に」 | 異なる → 分ける |
+
+<details>
+<summary>なぜ仕様上の条件で分けるのか</summary>
+
+テストケース名は仕様のドキュメントとして機能する。テストが失敗したとき、テストケース名を見て「どの仕様ルールが壊れたか」を特定できる必要がある。仕様上異なる条件を1つのテストケースにまとめてしまうと、失敗時にどのルールが壊れたのか特定できなくなる。
+</details>
+
+```typescript
+// 仕様：
+//   - メールアドレスの形式が不正な場合、400を返す
+//   - 未認証の場合、403を返す
+//   - 他ユーザーのリソースにアクセスした場合、403を返す
+
+// ✅ まとめてよい：入力値は異なるが、仕様上は同じ条件（メール形式不正）
+it.each(['', 'invalid', '@no-local', 'no-domain@'])(
+  'メールアドレス「%s」が不正な場合に400を返す',
+  async (email) => {
+    const event = createEvent({ body: JSON.stringify({ email }) })
+
+    const result = await sut(event, context)
+
+    expect(result.statusCode).toBe(400)
+  }
+)
+
+// ✅ 分けるべき：出力は同じ403だが、仕様上は別の条件
+it('未認証の場合に403を返す', async () => {
+  const event = createEvent({ headers: {} })
+
+  const result = await sut(event, context)
+
+  expect(result.statusCode).toBe(403)
+})
+
+it('他ユーザーのリソースにアクセスした場合に403を返す', async () => {
+  const event = createEvent({
+    headers: { Authorization: 'Bearer token-user-A' },
+    pathParameters: { id: 'resource-of-user-B' },
+  })
+
+  const result = await sut(event, context)
+
+  expect(result.statusCode).toBe(403)
+})
+```
+
 #### パラメータ化テスト
 
-- 同じロジックに異なる入力を流し込む場合に使用する
+- 仕様上同じ条件のバリエーションに異なる入力を流し込む場合に使用する
 - **正常系と異常系は必ず分離する**
 
 ```typescript
 // ✅ 良い例：正常系と異常系を分けたパラメータ化テスト
-describe('delivery_date_validation', () => {
+describe('配送日バリデーション', () => {
   // 異常系
-  it.each([-1, 0, 1])('past_or_today_date_%d_days_from_now_is_invalid', (days) => {
+  it.each([-1, 0, 1])('現在から%d日後の日付は無効である', (days) => {
     const date = addDays(new Date(), days)
     expect(isValidDeliveryDate(date)).toBe(false)
   })
 
   // 正常系
-  it.each([2, 3, 10])('date_%d_days_from_now_is_valid', (days) => {
+  it.each([2, 3, 10])('現在から%d日後の日付は有効である', (days) => {
     const date = addDays(new Date(), days)
     expect(isValidDeliveryDate(date)).toBe(true)
   })
@@ -343,7 +398,7 @@ const event = createApiGatewayEvent({ pathParameters: { id: 'user-123' } })
 
 ```typescript
 // ✅ 良い例：ユーザー視点で振る舞いを検証
-it('displays_error_message_when_form_submission_fails', async () => {
+it('フォーム送信失敗時にエラーメッセージを表示する', async () => {
   render(<LoginForm />)
 
   await userEvent.click(screen.getByRole('button', { name: '送信' }))
@@ -352,7 +407,7 @@ it('displays_error_message_when_form_submission_fails', async () => {
 })
 
 // ❌ 悪い例：実装の詳細（state）を検証
-it('sets_error_state_on_submit', () => {
+it('送信時にエラーstateをセットする', () => {
   const { result } = renderHook(() => useLoginForm())
   act(() => result.current.handleSubmit())
   expect(result.current.errorState).toBe(true)  // 内部stateの検証
