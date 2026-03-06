@@ -98,6 +98,32 @@ git log -1 --pretty=format:"%h - %an, %ar : %s" -- [ファイルパス]
 - output_mode: content
 - 説明: タブ3つ以上のインデントで制御フローキーワードが始まる行を検出する（3重以上のネストに相当）
 
+**不要なexport（exportされたシンボルの洗い出し）:**
+
+- パターン: `^export (const|function|class|type|interface|enum)\s+\w+`
+- output_mode: content
+- 説明: ファイル内でexportされているシンボルを列挙する
+
+上記で検出したシンボル名ごとに、プロジェクト内の他ファイルからimportされているか Grep で確認する:
+
+- パターン: `\b<シンボル名>\b`
+- glob: `**/*.{ts,tsx}`
+- output_mode: files_with_matches
+- 説明: レビュー対象ファイル以外での参照有無を確認する（レビュー対象ファイル自身はカウント外）
+
+**不要なpublic公開（publicメンバの洗い出し）:**
+
+- パターン: `^\s+public\s+`
+- output_mode: content
+- 説明: クラス内で明示的に `public` が付いたメンバ変数・メソッドを列挙する
+
+上記で検出した public メンバ名ごとに、クラス外（他ファイル）から参照されているか Grep で確認する:
+
+- パターン: `\.<メンバ名>\b`
+- glob: `**/*.{ts,tsx}`
+- output_mode: files_with_matches
+- 説明: レビュー対象ファイル以外でのアクセス有無を確認する。参照がない場合は `private` または `protected` への変更を提案する
+
 ### tryブロック長とネスト深度の目視確認
 
 Read で取得したファイル内容を確認し、以下を評価すること:
