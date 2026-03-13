@@ -57,7 +57,7 @@ gh issue view {番号} --json number,title,body,labels
 | `backend`      | `backend-design.md`        |
 | `frontend`     | `frontend-design.md`       |
 | `infra`, `cdk` | `infrastructure-design.md` |
-| `test`         | `test-specification.md`    |
+| `test`         | `test-policy.md`        |
 
 Issue内の `docs/design/{filename}.md` 言及や「対象ファイル」セクションがあれば優先する。
 
@@ -120,19 +120,19 @@ git diff --name-only
 - `backend-flow.md`
 - `frontend-design.md`
 
-`infrastructure-design.md` や `test-specification.md` のみの更新時はスキップする。
+`infrastructure-design.md` や `test-policy.md` のみの更新時はスキップする。
 
 #### 処理手順
 
 1. 更新された設計書を Read で読み込み、テスト対象のハンドラー/コンポーネントを特定する
-2. `docs/design/test-specification.md` を Read で読み込み、テスト方針を確認する
+2. `docs/design/test-policy.md` を Read で読み込み、テスト方針を確認する
 3. テスト対象ごとに、設計書の仕様（正常系パス、エラーケース、バリデーション等）からテストケースを洗い出す
 4. テストファイルを生成する（既存ファイルがある場合は Edit で追記）
 
 #### 生成ルール
 
 - `describe` / `it` の構造のみ生成し、テスト本体は**空**にする
-- テストケース名は**日本語**で記述する（test-specification.md セクション2.5準拠）
+- テストケース名は**日本語**で記述する（test-policy.md セクション2.5準拠）
 - 正常系と異常系は `describe` ブロックで分離する
 - ファイル配置:
   - バックエンド: `backend/src/handlers/__tests__/{ハンドラー名}.test.ts`
@@ -167,7 +167,7 @@ Phase 4.7 で生成/更新したテストケースが設計書の仕様を十分
 
 1. Phase 4.7 で生成/更新したテストファイルを Read で読み込む
 2. 更新された設計書の仕様（API仕様、画面仕様、ビジネスロジック等）と照合する
-3. `docs/design/test-specification.md` のテスト対象判断基準（セクション2.8）に基づき過不足をチェックする
+3. `docs/design/test-policy.md` のテスト対象判断基準（セクション2.8）に基づき過不足をチェックする
 4. 不足があればテストケースを Edit で追加、不要なものがあれば削除する
 
 #### チェック観点
