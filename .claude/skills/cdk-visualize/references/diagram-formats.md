@@ -1,6 +1,6 @@
 # ダイアグラムフォーマット仕様
 
-サンプル: `docs/img/aws-architecture.drawio`
+サンプル: `references/aws-architecture.drawio`
 
 ---
 
