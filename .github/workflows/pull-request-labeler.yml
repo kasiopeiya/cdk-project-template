@@ -32,6 +32,6 @@ jobs:
       - run: lsb_release -d
       - run: gh --version
 
-      - uses: actions/labeler@v5
+      - uses: actions/labeler@v6
         with:
           configuration-path: .github/configs/labeler.yml
